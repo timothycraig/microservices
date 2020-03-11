@@ -77,7 +77,6 @@ services:
     image: ttcraig/client:latest
     networks:
       - proxy
-      - backend
     deploy:
       replicas: 1
       labels:
@@ -91,10 +90,11 @@ services:
   backend:
     image: ttcraig/backend:latest
     networks:
-      - backend
+      - proxy
     deploy:
       replicas: 3
       labels:
+        - "traefik.enable=true"
         - "traefik.http.routers.backend.rule=Host(`iobio.frameshift.io`) && PathPrefix(`/api/`)"
         - "traefik.http.routers.backend.entrypoints=websecure"
         - "traefik.http.routers.backend.tls=true"
@@ -107,9 +107,6 @@ networks:
   proxy:
     driver: overlay
     name: proxy
-  backend:
-    driver: overlay
-    name: backend
 
 # Prerequisites - Must complete before launching stack
 
