@@ -1,0 +1,19 @@
+# Node 12 LTS image to build client bundle
+FROM node:12
+
+# Source code is in /app
+WORKDIR /app
+
+# Copy package.json & package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy code
+COPY . .
+
+EXPOSE 8000
+
+# Build client bundle
+CMD ["npm", "run", "serve"]

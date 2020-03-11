@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+
+  traefik:
+    image: traefik:v2.1
+    command:
+      - --api.debug=true
+      - --log.level=ERROR
+      - --entrypoints.web.address=:80
+      - --providers.docker
+      - --api.insecure
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    labels:
+      - "traefik.http.routers.client.rule=Host(`client.localhost`)"
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    volumes:
+      - /app/node_modules
+      - ./backend:/app
+    labels:
+      - "traefik.http.routers.backend.rule=Host(`client.localhost`) && PathPrefix(`/api/`)"
+      - "traefik.http.services.backend.loadbalancer.server.port=5000"
+      - "traefik.http.routers.backend.middlewares=stripapiprefix"
+      - "traefik.http.middlewares.stripapiprefix.stripprefix.prefixes=/api"
