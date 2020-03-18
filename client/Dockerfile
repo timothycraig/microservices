@@ -20,7 +20,7 @@ RUN npm run build
 FROM nginx
 
 # Copy nginx config
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Copy client bundle from builder container
 COPY --from=builder /app/dist /usr/share/nginx/html
