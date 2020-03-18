@@ -21,6 +21,8 @@ export default {
     async fetchData() {
       const { data: { message } } = await axios.get('/api/whoami')
 
+      await axios.get('/api/large')
+
       this.message = message
     },
   }

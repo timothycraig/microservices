@@ -35,6 +35,7 @@ services:
       - ./backend:/app
     labels:
       - "traefik.http.routers.backend.rule=Host(`client.localhost`) && PathPrefix(`/api/`)"
-      - "traefik.http.services.backend.loadbalancer.server.port=5000"
-      - "traefik.http.routers.backend.middlewares=stripapiprefix"
+      - "traefik.http.routers.backend.middlewares=stripapiprefix,test-compress"
       - "traefik.http.middlewares.stripapiprefix.stripprefix.prefixes=/api"
+      - "traefik.http.middlewares.test-compress.compress=true"
+      - "traefik.http.services.backend.loadbalancer.server.port=5000"

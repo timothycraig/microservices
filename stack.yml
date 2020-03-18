@@ -99,8 +99,9 @@ services:
         - "traefik.http.routers.backend.entrypoints=websecure"
         - "traefik.http.routers.backend.tls=true"
         - "traefik.http.routers.backend.tls.certresolver=leresolver"
-        - "traefik.http.routers.backend.middlewares=stripapiprefix"
+        - "traefik.http.routers.backend.middlewares=stripapiprefix,test-compress"
         - "traefik.http.middlewares.stripapiprefix.stripprefix.prefixes=/api"
+        - "traefik.http.middlewares.test-compress.compress=true"
         - "traefik.http.services.backend.loadbalancer.server.port=5000"
 
 networks:
